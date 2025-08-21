@@ -1,50 +1,51 @@
 def localProperties = new Properties()
+
 def localPropertiesFile = rootProject.file('local.properties')
 if (localPropertiesFile.exists()) {
-    localPropertiesFile.withReader('UTF-8') { reader ->
-        localProperties.load(reader)
-    }
+	localPropertiesFile.withReader('UTF-8') { reader ->
+		localProperties.load(reader)
+	}
 }
 
-def flutterRoot = localProperties.getProperty('flutter.sdk')
-if (flutterRoot == null) {
-    throw new FileNotFoundException("Flutter SDK not found. Define location with flutter.sdk in the local.properties file.")
-}
+// Removed flutterRoot; not needed with declarative Flutter Gradle plugin
 
 def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
 if (flutterVersionCode == null) {
-    flutterVersionCode = '1'
+	flutterVersionCode = '1'
 }
+
 
 def flutterVersionName = localProperties.getProperty('flutter.versionName')
 if (flutterVersionName == null) {
-    flutterVersionName = '1.0'
+	flutterVersionName = '1.0'
 }
 
-apply plugin: 'com.android.application'
-apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
+plugins {
+	id 'com.android.application'
+	id 'dev.flutter.flutter-gradle-plugin'
+}
 
 android {
-    namespace "net.nicolanicodemo.bmicalculator"
-    compileSdkVersion 34
+	namespace "net.nicolanicodemo.bmicalculator"
+	compileSdkVersion 34
 
-    defaultConfig {
-        applicationId "net.nicolanicodemo.bmicalculator"
-        minSdkVersion 21
-        targetSdkVersion 34
-        versionCode flutterVersionCode.toInteger()
-        versionName flutterVersionName
-    }
+	defaultConfig {
+		applicationId "net.nicolanicodemo.bmicalculator"
+		minSdkVersion 21
+		targetSdkVersion 34
+		versionCode flutterVersionCode.toInteger()
+		versionName flutterVersionName
+	}
 
-    buildTypes {
-        release {
-            signingConfig signingConfigs.debug
-        }
-    }
+	buildTypes {
+		release {
+			signingConfig signingConfigs.debug
+		}
+	}
 }
 
 flutter {
-    source '../..'
+	source '../..'
 }
 
 dependencies {
